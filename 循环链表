@@ -1,0 +1,165 @@
+//循环链表 
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+struct node{
+	int data1;
+	node *next;
+}; 
+class singlelink{
+	private:
+		node data;
+		int length;
+	public:
+		singlelink(){
+			length=0;
+			data.data1=0;
+			data.next=&data;
+		}
+		~singlelink(){};
+		bool isempty(){
+			if(length==0)
+				return true;
+			else 
+			 	return false;
+		}
+		int returnlength(){
+			return length;
+		}
+		bool insert(int position, int num);
+		bool deletenode(int position);
+		int returnnum(int position);
+		void returnallnum(int position);
+		bool deleteall();
+		void headinsert(int num);
+		void rearinsert(int num);
+		
+};
+	bool singlelink::insert(int position, int num){
+		if(position>length+1)
+			return false;
+		else{
+			node* probe=&data;
+			for(int i=1;i<position;i++){
+				probe=probe->next;
+			}
+			node* newnode=new node;
+			newnode->data1=num;
+			newnode->next=probe->next;
+			probe->next=newnode;
+			length++;
+		}
+		return true;
+	}
+	bool  singlelink::deletenode(int position){
+		if(position>length)
+			return false;
+		else{
+			node* probe=&data;
+			node* temp=NULL;
+			for(int i=1;i<position;i++){
+				probe=probe->next;
+			}
+			temp=probe->next;
+			probe->next=probe->next->next; 
+			free(temp);
+			length--;
+			return true;
+			
+		}	
+	}
+	int singlelink::returnnum(int position){
+		node* probe=&data;
+		for(int i=1;i<=position;i++){
+			probe=probe->next;
+		}
+		return probe->data1;
+	}
+	bool singlelink::deleteall(){
+		node* probehead=&data;
+		node* proberear=NULL;
+		while(probehead->next!=&data){
+			proberear=probehead->next;
+			free(probehead);
+			probehead=proberear;
+			length--;
+		}
+		free(probehead);
+		if(length==0)
+			return true;
+		else
+			return false;
+	}
+	void singlelink::headinsert(int num){
+		node* probe=&data;
+		node* newnode=new node;
+		newnode->data1=num;
+		newnode->next=probe->next;
+		probe->next=newnode;
+		length++;
+	}
+	void singlelink::rearinsert(int num){
+		node* probe=&data;
+		for(int i=1;i<=length;i++){
+			probe=probe->next;
+		}
+		node* newnode=new node;
+		newnode->data1=num;
+		newnode->next=&data;
+		probe->next=newnode;
+		length++;
+	}
+	void singlelink::returnallnum(int position){
+		int times=0;
+		node* probe=&data;
+		for(int i=1;i<=position;i++){
+			probe=probe->next;
+		}
+		while(times<length){
+			if(probe!=(&data)){
+			
+			cout<<probe->data1<<" ";
+			times++;
+			probe=probe->next;
+		}
+			else
+			probe=probe->next;
+		} 
+	}
+	int main(){
+		singlelink a1,a2;
+		if(a1.isempty())
+		cout<<"是空链表"<<endl;
+		for(int i=1, j=10;i<21;i++,j++){
+			a1.headinsert(j);
+			a2.rearinsert(j);
+		}
+		cout<<"a1，a2的长度分别是"<<a1.returnlength()<<"  "<<a2.returnlength()<<endl;
+		cout<<"a1成员为"<<endl; 
+		for (int i=1;i<=a1.returnlength();i++){
+		cout<<a1.returnnum(i)<<" ";
+		}
+		cout<<endl;
+		cout<<"a2成员为"<<endl; 
+		for (int i=1;i<=a2.returnlength();i++){
+		cout<<a2.returnnum(i)	<<" ";
+		}
+		cout<<endl;
+		a1.deletenode(9);
+		cout<<"删除第9node后a1成员为"<<endl; 
+		for (int i=1;i<=a1.returnlength();i++){
+		cout<<a1.returnnum(i)	<<" ";
+		}
+		cout<<endl;
+		a1.insert(9,520);
+		cout<<"插入第9node后a1成员为"<<endl; 
+		for (int i=1;i<=a1.returnlength();i++){
+		cout<<a1.returnnum(i)	<<" ";
+		}
+		cout<<endl;
+		a1.returnallnum(9);
+		cout<<endl;
+		if(a1.deleteall())
+		cout<<"删除a1成功"<<endl;
+		return 0;
+	}
